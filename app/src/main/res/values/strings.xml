@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Sharelendar</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_loginAdmin">Admin Login</string>
     <string name="title_activity_eventover_view">EventoverViewActivity</string>
 </resources>

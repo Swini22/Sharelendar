@@ -29,12 +29,12 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Klassenübersicht"
-                android:id="@+id/textView" />
+                android:id="@+id/KlassenText" />
 
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/listView" />
+                android:id="@+id/classList" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
