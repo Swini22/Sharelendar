@@ -1,28 +1,28 @@
 package ch.gibb.share.sharelendar;
 
-import android.content.Context;
+import android.app.FragmentManager;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AbsListView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClassoverViewActivity extends AppCompatActivity {
 
-    ArrayList<String> listItems= new ArrayList<String>();
-    ArrayAdapter<String> adapter;
+    public static String admin;
+    ArrayList<SchoolClass> listItems= new ArrayList<SchoolClass>();
+    ArrayAdapter<SchoolClass> adapter;
 
-    TextView theFact;
+    SharelendarService service = new SharelendarService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,35 +31,62 @@ public class ClassoverViewActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listItems.add("gugus");
-        listItems.add("gugus");
-        listItems.add("gugus");
-        listItems.add("gugus");
-
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1 , listItems);
         ListView classList = (ListView) findViewById(R.id.classList);
+        getDataSchoolClassesAndFillInList(classList);
+
+        classList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent myIntent = new Intent(ClassoverViewActivity.this, EventoverViewActivity.class);
+                myIntent.putExtra("test", "hello");
+                startActivity(myIntent);
+            }
+        });
+    }
+
+    private void getDataSchoolClassesAndFillInList(ListView classList) {
+        AsyncTask<Void, Void, List<SchoolClass>> asyncTask = new AsyncTask<Void, Void, List<SchoolClass>>() {
+
+            @Override
+            protected List<SchoolClass> doInBackground(Void... params) {
+                listItems.addAll(service.getAllSchoolClasses());
+                return listItems;
+            }
+
+            @Override
+            protected void onPostExecute(List<SchoolClass> result) {
+                super.onPostExecute(result);
+                adapter.notifyDataSetChanged();
+            }
+        };
+
+        adapter = new ArrayAdapter<SchoolClass>(this,android.R.layout.simple_list_item_1 , listItems);
         classList.setAdapter(adapter);
+
+        asyncTask.execute();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_classover_view, menu);
+        if(admin == null) {
+            getMenuInflater().inflate(R.menu.menu_classover_view, menu);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            showSignInDialog();
         }
-
         return super.onOptionsItemSelected(item);
     }
+
+    private void showSignInDialog() {
+        FragmentManager fm = getFragmentManager();
+        SignInDialog signInDialog = new SignInDialog();
+        signInDialog.show(fm, "Als Admin Anmelden");
+    }
+
 }
