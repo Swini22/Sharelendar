@@ -1,7 +1,9 @@
-package ch.gibb.share.sharelendar;
+package ch.gibb.share.sharelendar.model;
 
 
-public class SchoolClass {
+import java.io.Serializable;
+
+public class SchoolClass implements Serializable {
     private Integer id;
     private String name;
 

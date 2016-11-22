@@ -1,4 +1,4 @@
-package ch.gibb.share.sharelendar;
+package ch.gibb.share.sharelendar.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,14 +7,23 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.widget.EditText;
 
+import org.json.JSONObject;
 
+import ch.gibb.share.sharelendar.model.Admin;
+import ch.gibb.share.sharelendar.R;
+import ch.gibb.share.sharelendar.service.SharelendarService;
 
 
 public class SignInDialog extends DialogFragment {
 
     SharelendarService service = new SharelendarService();
-    Admin admin;
+    ClassoverViewActivity classoverViewActivity;
+
+    public SignInDialog(ClassoverViewActivity classoverViewActivity) {
+        this.classoverViewActivity = classoverViewActivity;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -25,8 +34,11 @@ public class SignInDialog extends DialogFragment {
                 .setPositiveButton("Anmelden", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-
+                        Dialog dialog1 =  SignInDialog.this.getDialog();
+                        Admin admin = new Admin();
+                        admin.setUsername(((EditText) dialog1.findViewById(R.id.username)).getText().toString());
+                        admin.setPassword(((EditText) dialog1.findViewById(R.id.password)).getText().toString());
+                        checkAdmin(admin);
                     }
                 })
                 .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
@@ -38,10 +50,9 @@ public class SignInDialog extends DialogFragment {
     }
 
     private void checkAdmin(final Admin admin){
-        new AsyncTask<Admin, Void, Boolean>() {
-
+        new AsyncTask<Admin , Void, Boolean>() {
             @Override
-            protected boolean doInBackground(Void... params) {
+            protected Boolean doInBackground(Admin... params) {
                 boolean result = service.checkAdmin(admin);
                 return result;
             }
@@ -49,8 +60,11 @@ public class SignInDialog extends DialogFragment {
             @Override
             protected void onPostExecute(Boolean result) {
                 super.onPostExecute(result);
-                ClassoverViewActivity.admin = admin.getUsername();
+                if (result){
+                    ClassoverViewActivity.admin = admin.getUsername();
+                    classoverViewActivity.updateClassOverView();
+                }
             }
-        }.execute();
+        }.execute(admin);
     }
 }

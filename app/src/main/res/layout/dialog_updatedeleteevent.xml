@@ -9,23 +9,23 @@
         android:scaleType="center"
         android:background="#3369ff"
         android:contentDescription="@string/app_name"
-        android:text="Anmelden"
+        android:text="Update Event"
         android:hapticFeedbackEnabled="false"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="25dp" />
-    <EditText
-        android:id="@+id/username"
-        android:inputType="textEmailAddress"
-        android:layout_width="match_parent"
+
+    <DatePicker
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:hint="@string/username" />
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"/>
+
     <EditText
-        android:id="@+id/password"
-        android:inputType="textPassword"
+        android:id="@+id/info"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -33,5 +33,12 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif"
-        android:hint="@string/password"/>
+        android:hint="@string/info"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Event"
+        android:id="@+id/deleteButton"
+        android:layout_gravity="right" />
 </LinearLayout>

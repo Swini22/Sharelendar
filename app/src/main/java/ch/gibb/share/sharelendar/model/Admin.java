@@ -1,4 +1,4 @@
-package ch.gibb.share.sharelendar;
+package ch.gibb.share.sharelendar.model;
 
 public class Admin {
     private String username;

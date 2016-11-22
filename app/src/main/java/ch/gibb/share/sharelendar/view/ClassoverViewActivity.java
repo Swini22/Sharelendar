@@ -1,4 +1,4 @@
-package ch.gibb.share.sharelendar;
+package ch.gibb.share.sharelendar.view;
 
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -16,13 +16,16 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.gibb.share.sharelendar.R;
+import ch.gibb.share.sharelendar.model.SchoolClass;
+import ch.gibb.share.sharelendar.service.SharelendarService;
+
 public class ClassoverViewActivity extends AppCompatActivity {
 
     public static String admin;
-    ArrayList<SchoolClass> listItems= new ArrayList<SchoolClass>();
-    ArrayAdapter<SchoolClass> adapter;
-
-    SharelendarService service = new SharelendarService();
+    private ArrayList<SchoolClass> listItems= new ArrayList<SchoolClass>();
+    private ArrayAdapter<SchoolClass> adapter;
+    private SharelendarService service = new SharelendarService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,10 @@ public class ClassoverViewActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        handleClassListListener();
+    }
+
+    private void handleClassListListener() {
         ListView classList = (ListView) findViewById(R.id.classList);
         getDataSchoolClassesAndFillInList(classList);
 
@@ -38,7 +45,8 @@ public class ClassoverViewActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent myIntent = new Intent(ClassoverViewActivity.this, EventoverViewActivity.class);
-                myIntent.putExtra("test", "hello");
+                SchoolClass schoolClass = (SchoolClass)parent.getItemAtPosition(position);
+                myIntent.putExtra("schoolClass", schoolClass);
                 startActivity(myIntent);
             }
         });
@@ -85,8 +93,12 @@ public class ClassoverViewActivity extends AppCompatActivity {
 
     private void showSignInDialog() {
         FragmentManager fm = getFragmentManager();
-        SignInDialog signInDialog = new SignInDialog();
-        signInDialog.show(fm, "Als Admin Anmelden");
+        SignInDialog signInDialog = new SignInDialog(this);
+        signInDialog.show(fm, "");
     }
 
+    public void updateClassOverView() {
+        finish();
+        startActivity(getIntent());
+    }
 }
