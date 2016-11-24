@@ -43,11 +43,15 @@ public class AddEventDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         Dialog dialog1 =  AddEventDialog.this.getDialog();
-                        Event event = new Event();
-                        event.setDate(new Date(((DatePicker) dialog1.findViewById(R.id.date)).getCalendarView().getDate()));
-                        event.setInformation(((EditText) dialog1.findViewById(R.id.info)).getText().toString());
-                        event.setSchoolClass(schoolClass);
-                        createEvent(event);
+                        Date date = new Date(((DatePicker) dialog1.findViewById(R.id.date)).getCalendarView().getDate());
+                        String info = ((EditText) dialog1.findViewById(R.id.info)).getText().toString();
+                        if (!info.equals("") && !date.equals(null)) {
+                            Event event = new Event();
+                            event.setDate(date);
+                            event.setInformation(info);
+                            event.setSchoolClass(schoolClass);
+                            createEvent(event);
+                        }
                     }
                 })
                 .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {

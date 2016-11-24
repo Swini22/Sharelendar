@@ -266,4 +266,48 @@ public class SharelendarService {
         return newEvent;
     }
 
+    public Event deleteEvent(Event event) {
+        HttpURLConnection urlConnection= null;
+        JSONObject eventJSON = new JSONObject();
+        JSONObject schoolClassJSON = new JSONObject();
+        Event newEvent = null;
+
+        try {
+            URL url = new URL("https://sharelender.born.ch/DeleteEvent");
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("DELETE");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestProperty("Accept", "application/json");
+            urlConnection.connect();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            eventJSON.put("date", simpleDateFormat.format(event.getDate()));
+            eventJSON.put("information", event.getInformation());
+            eventJSON.put("id", event.getId());
+            schoolClassJSON.put("id", event.getSchoolClass().getId());
+            schoolClassJSON.put("name", event.getSchoolClass().getName());
+            eventJSON.put("schoolClass", schoolClassJSON);
+
+
+            // Send PUT output.
+            DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream ());
+            out.writeBytes(eventJSON.toString());
+            out.flush();
+            out.close();
+
+            int httpResult = urlConnection.getResponseCode();
+            if(httpResult == HttpURLConnection.HTTP_OK){
+                newEvent = event;
+            }
+        } catch (IOException |JSONException e) {
+            e.printStackTrace();
+        }finally{
+            if(urlConnection!=null)
+                urlConnection.disconnect();
+        }
+        return newEvent;
+    }
+
+
 }

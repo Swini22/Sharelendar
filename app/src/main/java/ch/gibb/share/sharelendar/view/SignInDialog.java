@@ -34,11 +34,15 @@ public class SignInDialog extends DialogFragment {
                 .setPositiveButton("Anmelden", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        Dialog dialog1 =  SignInDialog.this.getDialog();
-                        Admin admin = new Admin();
-                        admin.setUsername(((EditText) dialog1.findViewById(R.id.username)).getText().toString());
-                        admin.setPassword(((EditText) dialog1.findViewById(R.id.password)).getText().toString());
-                        checkAdmin(admin);
+                        Dialog dialog1 = SignInDialog.this.getDialog();
+                        String username = ((EditText) dialog1.findViewById(R.id.username)).getText().toString();
+                        String password = ((EditText) dialog1.findViewById(R.id.password)).getText().toString();
+                        if (!username.equals("") && !password.equals("")) {
+                            Admin admin = new Admin();
+                            admin.setUsername(username);
+                            admin.setPassword(password);
+                            checkAdmin(admin);
+                        }
                     }
                 })
                 .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {

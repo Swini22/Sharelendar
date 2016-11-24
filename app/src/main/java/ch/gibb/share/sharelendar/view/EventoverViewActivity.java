@@ -60,14 +60,15 @@ public class EventoverViewActivity extends AppCompatActivity {
         eventuebersichtText.setText(eventuebersichtText.getText() + " " + schoolClass.getName());
         ListView eventList = (ListView) findViewById(R.id.eventListView);
         getDataEventDataAndFillInList(eventList);
-
-        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Event event = (Event)parent.getItemAtPosition(position);
-                showUpdateDeleteDialog(event);
-            }
-        });
+        if (ClassoverViewActivity.admin != null) {
+            eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Event event = (Event) parent.getItemAtPosition(position);
+                    showUpdateDeleteDialog(event);
+                }
+            });
+        }
     }
 
     private void getDataEventDataAndFillInList(ListView eventList) {
